@@ -1,20 +1,18 @@
----
-version: "2.1"
 services:
   flaresolverr:
-    # DockerHub mirror flaresolverr/flaresolverr:latest
-    image: ghcr.io/flaresolverr/flaresolverr:latest
+    image: flaresolverr/flaresolverr:latest
     container_name: flaresolverr
+    hostname: Z4Pro-AQ0A
+    network_mode: host
     environment:
-      - LOG_LEVEL=${LOG_LEVEL:-info}
-      - LOG_FILE=${LOG_FILE:-none}
-      - LOG_HTML=${LOG_HTML:-false}
-      - CAPTCHA_SOLVER=${CAPTCHA_SOLVER:-none}
-      - TZ=Europe/London
-    ports:
-      - "${PORT:-8191}:8191"
+      - LANG=C.UTF-8
+      - GPG_KEY=A035C8C19219BA821ECEA86B64E628F8D684696D
+      - PYTHON_VERSION=3.11.16
+      - PYTHON_SHA256=91bcdebfdde239a003ae93738a7fce0f9230fee5c4bc2b86f6e6e8c6f98aabe8
     volumes:
-      - /var/lib/flaresolver:/config
-    tmpfs:
-      - /tmp:size=256M,mode=1777
+      - /tmp/zfsv3/nvme13/18951898987/data/Docker/flaresolverr/config:/config
     restart: unless-stopped
+    command: ["/usr/local/bin/python", "-u", "/app/flaresolverr.py"]
+    entrypoint: ["/usr/bin/dumb-init", "--"]
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
