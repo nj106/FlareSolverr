@@ -2,15 +2,15 @@ services:
   flaresolverr:
     image: flaresolverr/flaresolverr:latest
     container_name: flaresolverr
-    hostname: Z4Pro-AQ0A
+    hostname: ${HOSTNAME}
     network_mode: host
     environment:
-      - LANG=C.UTF-8
+      - LANG=${LANG}
       - GPG_KEY=A035C8C19219BA821ECEA86B64E628F8D684696D
       - PYTHON_VERSION=3.11.16
       - PYTHON_SHA256=91bcdebfdde239a003ae93738a7fce0f9230fee5c4bc2b86f6e6e8c6f98aabe8
     volumes:
-      - /tmp/zfsv3/nvme13/18951898987/data/Docker/flaresolverr/config:/config
+      - ${FLARESOLVERR_CONFIG_PATH}:/config
     restart: unless-stopped
     command: ["/usr/local/bin/python", "-u", "/app/flaresolverr.py"]
     entrypoint: ["/usr/bin/dumb-init", "--"]
